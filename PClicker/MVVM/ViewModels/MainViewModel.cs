@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using PClicker.Tools;
+using System;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace PClicker.ViewModels
@@ -70,6 +67,21 @@ namespace PClicker.ViewModels
                   }));
             }
         }
+        
+        private RelayCommand testCommand;
+        public RelayCommand TestCommand
+        {
+            get
+            {
+                return testCommand ??
+                  (testCommand = new RelayCommand(obj=> 
+                  {
+                      var r = AllWindows.Where(wh => wh.Name.Contains("LDPlayer")).FirstOrDefault();
+                      var b = WindowScreenshot.GetWindowScreen(r.Handle, 900);
+                      b.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+@"\aaa.png");
+                  }));
+            }
+        }
 
         public MainViewModel()
         {
@@ -87,6 +99,7 @@ namespace PClicker.ViewModels
                 return true;
             }, IntPtr.Zero);
             AllWindows = new ObservableCollection<WindowHandle>(AllWindows.OrderBy(wh => wh.Name));
+            OnPropertyChanged("AllWindows");
         }
     }
 }

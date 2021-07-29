@@ -17,10 +17,12 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" Margin="5" Content="Добавить" Command="{Binding AddCommand}"/>
             <Button Grid.Column="1" Margin="5" Content="Удалить" Command="{Binding RemoveCommand}"/>
             <Button Grid.Column="2" Margin="5" Content="Обновить окна" Command="{Binding UpdateWindowsCommand}"/>
+            <Button Grid.Column="3" Margin="5" Content="Test" Command="{Binding TestCommand}"/>
         </Grid>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -40,10 +42,10 @@
                                     <Button.Style>
                                         <Style>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Enable}" Value="True">
+                                                <DataTrigger Binding="{Binding Enabled}" Value="True">
                                                     <Setter Property="Button.Content" Value="Включено"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Enable}" Value="False">
+                                                <DataTrigger Binding="{Binding Enabled}" Value="False">
                                                     <Setter Property="Button.Content" Value="Выключено"/>
                                                 </DataTrigger>
                                             </Style.Triggers>

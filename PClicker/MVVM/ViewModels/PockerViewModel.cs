@@ -1,4 +1,5 @@
-﻿using PClicker.ViewModels;
+﻿using PClicker.MVVM.Models;
+using PClicker.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,20 @@ namespace PClicker.ViewModels
 {
     class PockerViewModel : BaseViewModel
     {
-        private static int PockersCount = 0;
-        public WindowHandle Window { get; set; }
-        public int Id { get; }
-        public bool Enable { get; set; }
-
-        public PockerViewModel()
+        private Pocker p = new Pocker();
+        public WindowHandle Window
         {
-            Id = PockersCount++;
+            get { return p.Window; }
+            set { p.Window = value; OnPropertyChanged("Window"); }
+        }
+        public int Id 
+        { 
+            get { return p.Id; }
+        }
+        public bool Enabled
+        { 
+            get { return p.T.Enabled; }
+            set { p.T.Enabled = value; OnPropertyChanged("Enable"); } 
         }
 
         private RelayCommand changeEnableCommand;
@@ -28,8 +35,7 @@ namespace PClicker.ViewModels
                 return changeEnableCommand ??
                   (changeEnableCommand = new RelayCommand(obj =>
                   {
-                      Enable = !Enable;
-                      OnPropertyChanged("Enable");
+                      Enabled = !Enabled;
                   }));
             }
         }

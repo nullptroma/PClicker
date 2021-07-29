@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Tesseract;
 
-namespace PClicker
+namespace PClicker.Tools
 {
     static class FindText
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 
-namespace PClicker
+namespace PClicker.Tools
 {
     static class WinAPI
     {
@@ -21,5 +21,22 @@ namespace PClicker
             GetWindowText(hWnd, sb, 256);
             return sb.ToString();
         }
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetWindowRect(IntPtr hwnd, out Rectangle lpRect);
+        public static Rectangle GetWindowRect(IntPtr hwnd)
+        {
+            Rectangle rect;
+            GetWindowRect(hwnd, out rect);
+            rect.Width -= rect.X;
+            rect.Height-= rect.Y;
+            return rect;
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
     }
 }
