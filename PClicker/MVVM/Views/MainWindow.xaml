@@ -37,15 +37,15 @@
 
                             <StackPanel  Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" >
                                 <Label Content="Окно:"/>
-                                <ComboBox DockPanel.Dock="Left" MinWidth="75" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.AllWindows}"/>
-                                <Button Margin="25,0,0,0" Command="{Binding ChangeEnableCommand}">
+                                <ComboBox DockPanel.Dock="Left" MinWidth="75" SelectedItem="{Binding Window}" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.AllWindows}"/>
+                                <Button Margin="25,0,0,0" Command="{Binding ChangeEnableCommand}" Padding="5,0,5,0">
                                     <Button.Style>
                                         <Style>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Enabled}" Value="True">
+                                                <DataTrigger Binding="{Binding Enable}" Value="True">
                                                     <Setter Property="Button.Content" Value="Включено"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Enabled}" Value="False">
+                                                <DataTrigger Binding="{Binding Enable}" Value="False">
                                                     <Setter Property="Button.Content" Value="Выключено"/>
                                                 </DataTrigger>
                                             </Style.Triggers>

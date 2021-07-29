@@ -77,7 +77,7 @@ namespace PClicker.ViewModels
                   (testCommand = new RelayCommand(obj=> 
                   {
                       var r = AllWindows.Where(wh => wh.Name.Contains("LDPlayer")).FirstOrDefault();
-                      var b = WindowScreenshot.GetWindowScreen(r.Handle, 900);
+                      var b = WindowScreenshot.PrintWindow(r.Handle);
                       b.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+@"\aaa.png");
                   }));
             }
@@ -94,7 +94,7 @@ namespace PClicker.ViewModels
             WinAPI.EnumWindows((hwnd, l) =>
             {
                 var wh = new WindowHandle(hwnd);
-                if (!string.IsNullOrEmpty(wh.Name.Trim()))
+                if (!string.IsNullOrEmpty(wh.Name.Trim()) && wh.Name.Contains("LDPlayer"))
                     AllWindows.Add(wh);
                 return true;
             }, IntPtr.Zero);

@@ -21,10 +21,10 @@ namespace PClicker.ViewModels
         { 
             get { return p.Id; }
         }
-        public bool Enabled
+        public bool Enable
         { 
-            get { return p.T.Enabled; }
-            set { p.T.Enabled = value; OnPropertyChanged("Enable"); } 
+            get { return p.Enable; }
+            set { p.Enable = value; OnPropertyChanged("Enable"); } 
         }
 
         private RelayCommand changeEnableCommand;
@@ -35,7 +35,7 @@ namespace PClicker.ViewModels
                 return changeEnableCommand ??
                   (changeEnableCommand = new RelayCommand(obj =>
                   {
-                      Enabled = !Enabled;
+                      Enable = !Enable;
                   }));
             }
         }
