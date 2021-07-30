@@ -25,7 +25,11 @@ namespace PClicker.ViewModels
         { 
             get { return p.Enable; }
             set { p.Enable = value; OnPropertyChanged("Enable"); } 
-        }
+        } 
+        public string Command
+        { 
+            get { return p.Command; }
+        } 
 
         private RelayCommand changeEnableCommand;
         public RelayCommand ChangeEnableCommand
@@ -38,6 +42,24 @@ namespace PClicker.ViewModels
                       Enable = !Enable;
                   }));
             }
+        }
+        
+        private RelayCommand saveCluePosCommand;
+        public RelayCommand SaveCluePosCommand
+        {
+            get
+            {
+                return saveCluePosCommand ??
+                  (saveCluePosCommand = new RelayCommand(obj =>
+                  {
+                      p.SaveCluePos();
+                  }));
+            }
+        }
+
+        public PockerViewModel()
+        {
+            p.PropertyChanged += (sender, e) => { OnPropertyChanged(e.PropertyName); };
         }
     }
 }

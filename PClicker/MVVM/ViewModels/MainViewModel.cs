@@ -1,6 +1,7 @@
 ﻿using PClicker.Tools;
 using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 
@@ -48,6 +49,7 @@ namespace PClicker.ViewModels
                       {
                           var index = Pockers.IndexOf(SelectedPocker);
                           Pockers.Remove(SelectedPocker);
+                          SelectedPocker.Enable = false;
                           if (index > 0)
                               SelectedPocker = Pockers.Count > 0 ? Pockers[index - 1] : null;
                       }
@@ -76,9 +78,10 @@ namespace PClicker.ViewModels
                 return testCommand ??
                   (testCommand = new RelayCommand(obj=> 
                   {
-                      var r = AllWindows.Where(wh => wh.Name.Contains("LDPlayer")).FirstOrDefault();
-                      var b = WindowScreenshot.PrintWindow(r.Handle);
-                      b.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+@"\aaa.png");
+                      Bitmap b = (Bitmap)Bitmap.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+ @"\544422.jpg");
+                      Tools.FindCommand.DeleteNonWhite(b);
+                      MessageBox.Show(Tools.FindCommand.GetCommand(b));
+                      //b.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\testWhite2.png");
                   }));
             }
         }

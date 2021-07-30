@@ -28,17 +28,10 @@ namespace PClicker.Tools
                     break;
             }
 
-            WinAPI.RECT rc;
             if (endHeigth != -1)
-            {
-                WinAPI.GetWindowRect(hwnd, out rc);
-                double rate = rc.Height * 1.0 / rc.Width;
-                int endWidth = (int)(endHeigth / rate);
-                int newX = rc.X - (endWidth - rc.Width);
-                int newY = rc.Y - (endHeigth - rc.Height);
-                WinAPI.MoveWindow(hwnd, newX, newY, endWidth, endHeigth, true);
-            }
+                ResizeWindow(hwnd, endHeigth);
 
+            WinAPI.RECT rc;
             WinAPI.GetWindowRect(hwnd, out rc);
 
             Bitmap bmp = new Bitmap(rc.Width, rc.Height, PixelFormat.Format32bppArgb);
@@ -51,6 +44,19 @@ namespace PClicker.Tools
             gfxBmp.Dispose();
 
             return bmp;
+        }
+
+        public static void ResizeWindow(IntPtr hWnd, int endHeigth)
+        {
+            WinAPI.RECT rc;
+            WinAPI.GetWindowRect(hWnd, out rc);
+            if (endHeigth == rc.Height)
+                return;
+            double rate = rc.Height * 1.0 / rc.Width;
+            int endWidth = (int)(endHeigth / rate);
+            int newX = rc.X - (endWidth - rc.Width);
+            int newY = rc.Y - (endHeigth - rc.Height);
+            WinAPI.MoveWindow(hWnd, newX, newY, endWidth, endHeigth, true);
         }
     }
 }

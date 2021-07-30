@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Drawing;
 
-namespace PClicker.Tools
+namespace PClicker
 {
     static partial class WinAPI
     {
