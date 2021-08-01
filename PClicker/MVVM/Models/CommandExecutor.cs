@@ -16,6 +16,7 @@ namespace PClicker.MVVM.Models
             new CheckOrCallCmd(),
             new RaiseOrBetCmd(),
             new AllInCmdType1(),
+            new AllInCmdType2(),
         };
         public IntPtr WindowHandle;
 
@@ -32,8 +33,7 @@ namespace PClicker.MVVM.Models
                 WinAPI.ShowWindow(WindowHandle);
                 WinAPI.SetForegroundWindow(WindowHandle);
                 WinAPI.RECT wRect = WinAPI.GetWindowRect(WindowHandle);
-                WinAPI.SetCursorPos(wRect.X + 268, wRect.Y + 282);
-                WinAPI.LeftClick();
+                WinAPI.LeftClick(wRect.X + 268, wRect.Y + 282);
                 Thread.Sleep(Settings.SleepTime);
                 foreach (var cmd in Commands)
                     if (cmd.TryExecute(WindowHandle, execCmdStr))

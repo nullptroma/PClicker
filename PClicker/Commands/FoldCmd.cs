@@ -19,8 +19,7 @@ namespace PClicker.Commands
             WinAPI.RECT wRect = WinAPI.GetWindowRect(wHandle);
             if (IsInValid(str))
                 return false;
-            WinAPI.SetCursorPos(wRect.X + 85, wRect.Y + 950);
-            WinAPI.LeftClick();
+            WinAPI.LeftClick(wRect.X + 85, wRect.Y + 950);
             return true;
         }
     }

@@ -41,8 +41,7 @@ namespace PClicker.Commands
 
         private static void RightDownClick(WinAPI.RECT wRect)
         {
-            WinAPI.SetCursorPos(wRect.X + 500, wRect.Y + 950);
-            WinAPI.LeftClick();
+            WinAPI.LeftClick(wRect.X + 500, wRect.Y + 950);
         }
 
         private static Point ScrollPos(IntPtr wHandle, WinAPI.RECT wRect)

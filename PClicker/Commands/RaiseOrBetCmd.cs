@@ -29,18 +29,17 @@ namespace PClicker.Commands
             {
                 case "бет1/2банк":
                 case "рейз2х":
-                    WinAPI.SetCursorPos(wRect.X + 70, wRect.Y + 950);
+                    WinAPI.LeftClick(wRect.X + 70, wRect.Y + 950);
                     break;
                 case "бет2/3банк":
                 case "рейз3х":
-                    WinAPI.SetCursorPos(wRect.X + 200, wRect.Y + 950);
+                    WinAPI.LeftClick(wRect.X + 200, wRect.Y + 950);
                     break;
                 case "бетбанк":
                 case "рейз4х":
-                    WinAPI.SetCursorPos(wRect.X + 310, wRect.Y + 950);
+                    WinAPI.LeftClick(wRect.X + 310, wRect.Y + 950);
                     break;
             }
-            WinAPI.LeftClick();
             Thread.Sleep(Settings.SleepTime);
 
             RightDownClick(wRect);
@@ -49,8 +48,7 @@ namespace PClicker.Commands
 
         private void RightDownClick(WinAPI.RECT wRect)
         {
-            WinAPI.SetCursorPos(wRect.X + 500, wRect.Y + 950);
-            WinAPI.LeftClick();
+            WinAPI.LeftClick(wRect.X + 500, wRect.Y + 950);
         }
     }
 }
