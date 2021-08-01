@@ -70,29 +70,6 @@ namespace PClicker.ViewModels
                   }));
             }
         }
-        
-        private RelayCommand testCommand;
-        public RelayCommand TestCommand
-        {
-            get
-            {
-                return testCommand ??
-                  (testCommand = new RelayCommand(obj=> 
-                  {
-                      Bitmap game = (Bitmap)Bitmap.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+ @"\рейзы.png");
-                      Bitmap scroll = Tools.WindowScreenshot.GetRect(game, Settings.ScrollRect);
-                      WinAPI.SetCursorPos(500, 1080);
-                      //WinAPI.mouse_event(WinAPI.MouseEventFlags.LEFTDOWN, 0, 0, 0, 0);
-
-                      for (int i = 0; i < 275; i += 1)
-                          WinAPI.mouse_event(WinAPI.MouseEventFlags.MOVE, 0, -2, 0, 0);
-                      Thread.Sleep(Settings.SleepTime);
-
-                      WinAPI.mouse_event(WinAPI.MouseEventFlags.LEFTUP, 0, 0, 0, 0);
-                      Thread.Sleep(Settings.SleepTime);
-                  }));
-            }
-        }
 
         public MainViewModel()
         {
