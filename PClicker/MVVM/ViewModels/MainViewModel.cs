@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 
 namespace PClicker.ViewModels
 {
@@ -47,9 +48,9 @@ namespace PClicker.ViewModels
                   {
                       if (SelectedPocker != null)
                       {
+                          SelectedPocker.Enable = false;
                           var index = Pockers.IndexOf(SelectedPocker);
                           Pockers.Remove(SelectedPocker);
-                          SelectedPocker.Enable = false;
                           if (index > 0)
                               SelectedPocker = Pockers.Count > 0 ? Pockers[index - 1] : null;
                       }

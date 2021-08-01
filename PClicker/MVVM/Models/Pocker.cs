@@ -32,7 +32,7 @@ namespace PClicker.MVVM.Models
             get { return enable; }
             set
             {
-                if (Window.Handle == IntPtr.Zero)
+                if (Window.Handle == IntPtr.Zero && value)
                 {
                     MessageBox.Show("Выберите окно", "Ошибка");
                     return;
