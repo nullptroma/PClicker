@@ -65,7 +65,7 @@
                             </Button>
                             <Button Grid.Column="4" Content="Показать место для подсказки" Padding="5,0,5,0" Margin="10,0,0,0" Command="{Binding SaveCluePosCommand}"/>
                             <ScrollViewer Grid.Column="5">
-                                <TextBlock Text="{Binding Command}" TextWrapping="Wrap"/>
+                                <TextBox Text="{Binding Command, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True"/>
                             </ScrollViewer>
                         </Grid>
                     </DataTemplate>

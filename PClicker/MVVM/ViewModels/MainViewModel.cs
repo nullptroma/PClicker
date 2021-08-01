@@ -3,7 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
-using System.Windows;
+using System.Threading;
 
 namespace PClicker.ViewModels
 {
@@ -78,10 +78,17 @@ namespace PClicker.ViewModels
                 return testCommand ??
                   (testCommand = new RelayCommand(obj=> 
                   {
-                      Bitmap b = (Bitmap)Bitmap.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+ @"\544422.jpg");
-                      Tools.FindCommand.DeleteNonWhite(b);
-                      MessageBox.Show(Tools.FindCommand.GetCommand(b));
-                      //b.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\testWhite2.png");
+                      Bitmap game = (Bitmap)Bitmap.FromFile(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+ @"\рейзы.png");
+                      Bitmap scroll = Tools.WindowScreenshot.GetRect(game, Settings.ScrollRect);
+                      WinAPI.SetCursorPos(500, 1080);
+                      //WinAPI.mouse_event(WinAPI.MouseEventFlags.LEFTDOWN, 0, 0, 0, 0);
+
+                      for (int i = 0; i < 275; i += 1)
+                          WinAPI.mouse_event(WinAPI.MouseEventFlags.MOVE, 0, -2, 0, 0);
+                      Thread.Sleep(Settings.SleepTime);
+
+                      WinAPI.mouse_event(WinAPI.MouseEventFlags.LEFTUP, 0, 0, 0, 0);
+                      Thread.Sleep(Settings.SleepTime);
                   }));
             }
         }

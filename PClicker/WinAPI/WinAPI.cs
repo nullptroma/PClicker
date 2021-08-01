@@ -31,8 +31,6 @@ namespace PClicker
         {
             RECT rect;
             GetWindowRect(hwnd, out rect);
-            rect.Width -= rect.X;
-            rect.Height -= rect.Y;
             return rect;
         }
 
@@ -62,5 +60,39 @@ namespace PClicker
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool GetWindowPlacement(IntPtr hWnd, ref WINDOWPLACEMENT lpwndpl);
+
+        [DllImport("user32.dll")]
+        public static extern void mouse_event(MouseEventFlags dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
+        [Flags]
+        public enum MouseEventFlags
+        {
+            LEFTDOWN = 0x00000002,
+            LEFTUP = 0x00000004,
+            MIDDLEDOWN = 0x00000020,
+            MIDDLEUP = 0x00000040,
+            RIGHTDOWN = 0x00000008,
+            RIGHTUP = 0x00000010,
+            MOVE = 0x0001
+        }
+        [DllImport("user32.dll")]
+        public static extern void SetCursorPos(int x, int y);
+
+        public static void ShowWindow(IntPtr hwnd)
+        {
+            WinAPI.WINDOWPLACEMENT wp = new WinAPI.WINDOWPLACEMENT();
+            WinAPI.GetWindowPlacement(hwnd, ref wp);
+            switch (wp.ShowCmd)
+            {
+                case WinAPI.ShowCommands.SW_HIDE:
+                case WinAPI.ShowCommands.SW_MINIMIZE:
+                case WinAPI.ShowCommands.SW_SHOWMINIMIZED:
+                case WinAPI.ShowCommands.SW_SHOWMINNOACTIVE:
+                case WinAPI.ShowCommands.SW_SHOWNA:
+                case WinAPI.ShowCommands.SW_SHOWNOACTIVATE:
+                case WinAPI.ShowCommands.SW_FORCEMINIMIZE:
+                    WinAPI.ShowWindow(hwnd, WinAPI.ShowCommands.SW_NORMAL);
+                    break;
+            }
+        }
     }
 }

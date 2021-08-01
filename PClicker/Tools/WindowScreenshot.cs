@@ -13,20 +13,7 @@ namespace PClicker.Tools
     {
         public static Bitmap PrintWindow(IntPtr hwnd, int endHeigth = -1)
         {
-            WinAPI.WINDOWPLACEMENT wp = new WinAPI.WINDOWPLACEMENT();
-            WinAPI.GetWindowPlacement(hwnd, ref wp);
-            switch (wp.ShowCmd)
-            {
-                case WinAPI.ShowCommands.SW_HIDE:
-                case WinAPI.ShowCommands.SW_MINIMIZE:
-                case WinAPI.ShowCommands.SW_SHOWMINIMIZED:
-                case WinAPI.ShowCommands.SW_SHOWMINNOACTIVE:
-                case WinAPI.ShowCommands.SW_SHOWNA:
-                case WinAPI.ShowCommands.SW_SHOWNOACTIVATE:
-                case WinAPI.ShowCommands.SW_FORCEMINIMIZE:
-                    WinAPI.ShowWindow(hwnd, WinAPI.ShowCommands.SW_NORMAL);
-                    break;
-            }
+            WinAPI.ShowWindow(hwnd);
 
             if (endHeigth != -1)
                 ResizeWindow(hwnd, endHeigth);
@@ -57,6 +44,14 @@ namespace PClicker.Tools
             int newX = rc.X - (endWidth - rc.Width);
             int newY = rc.Y - (endHeigth - rc.Height);
             WinAPI.MoveWindow(hWnd, newX, newY, endWidth, endHeigth, true);
+        }
+
+        public static Bitmap GetRect(Bitmap bmp, Rectangle rect)
+        {
+            Bitmap screenRect = new Bitmap(rect.Width, rect.Height);
+            Graphics g = Graphics.FromImage(screenRect);
+            g.DrawImage(bmp, 0, 0, rect, GraphicsUnit.Pixel);
+            return screenRect;
         }
     }
 }
