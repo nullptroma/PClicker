@@ -8,8 +8,8 @@ namespace PClicker.Tools
 {
     static class FindCommand
     {
-        private static TesseractEngine engineRus = new TesseractEngine(@"C:\lang", "rus", EngineMode.Default);
-        private static TesseractEngine engineEng = new TesseractEngine(@"C:\lang", "eng", EngineMode.Default);
+        private static TesseractEngine engineRus = new TesseractEngine(System.IO.Directory.GetCurrentDirectory()+@"\Lang", "rus", EngineMode.Default);
+        private static TesseractEngine engineEng = new TesseractEngine(System.IO.Directory.GetCurrentDirectory()+@"\Lang", "eng", EngineMode.Default);
 
         public static string TextRus(Bitmap bmp)
         {

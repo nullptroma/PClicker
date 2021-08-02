@@ -77,11 +77,18 @@ namespace PClicker.MVVM.Models
                 MessageBox.Show("Выберите окно", "Ошибка");
                 return;
             }
-            var bmp = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
-            Graphics g = Graphics.FromImage(bmp);
-            g.DrawRectangle(new Pen(Brushes.Red, 3), Settings.ClueRect);
-            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @$"\PlaceForClue{Id}.jpg";
-            bmp.Save(path);
+            try
+            {
+                var bmp = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
+                Graphics g = Graphics.FromImage(bmp);
+                g.DrawRectangle(new Pen(Brushes.Red, 3), Settings.ClueRect);
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @$"\PlaceForClue{Id}.jpg";
+                bmp.Save(path);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
