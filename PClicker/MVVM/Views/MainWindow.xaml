@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:PClicker"
         mc:Ignorable="d"
         Title="PClicker" Height="450" Width="800">
@@ -21,6 +22,7 @@
             <Button Grid.Column="0" Margin="5" Content="Добавить" Command="{Binding AddCommand}"/>
             <Button Grid.Column="1" Margin="5" Content="Удалить" Command="{Binding RemoveCommand}"/>
             <Button Grid.Column="2" Margin="5" Content="Обновить окна" Command="{Binding UpdateWindowsCommand}"/>
+            <Button Grid.Column="2" Margin="5" Content="Test" Command="{Binding TestCommand}"/>
         </Grid>
 
         <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -35,6 +37,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,5,0" >
                                 <Label Content= "{Binding Id}" Margin="-5,0,0,0"/>
@@ -43,7 +46,13 @@
                             <TextBox Grid.Column="1" UndoLimit="32" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" />
                             <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,5,0" >
                                 <Label Content="Окно:"/>
-                                <ComboBox DockPanel.Dock="Left" MinWidth="75" SelectedItem="{Binding Window}" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.AllWindows}"/>
+                                <ComboBox DockPanel.Dock="Left" MinWidth="75" SelectedValue="{Binding Window}" ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.AllWindows}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=DataContext.UpdateWindowsCommand}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ComboBox>
                             </StackPanel>
                             <Button Grid.Column="3" Margin="25,0,0,0" Command="{Binding ChangeEnableCommand}" Padding="5,0,5,0">
                                 <Button.Style>
@@ -61,10 +70,9 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
-                            <Button Grid.Column="4" Content="Показать место для подсказки" Padding="5,0,5,0" Margin="10,0,0,0" Command="{Binding SaveCluePosCommand}"/>
-                            <ScrollViewer Grid.Column="5">
-                                <TextBox Text="{Binding Command, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True"/>
-                            </ScrollViewer>
+                            <CheckBox Grid.Column="4" Content="CheckBot" Margin="10,0,0,0" IsChecked="{Binding CheckBot}"/>
+                            <Button Grid.Column="5" Content="Показать место для подсказки" Padding="5,0,5,0" Margin="10,0,10,0" Command="{Binding SaveCluePosCommand}"/>
+                            <TextBox Grid.Column="6" Text="{Binding Command, Mode=OneWay}" TextWrapping="Wrap" IsReadOnly="True" Margin="0,0,5,0"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

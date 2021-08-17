@@ -67,7 +67,7 @@ namespace PClicker.Tools
             }
             else if (str.Contains("рейз"))
             {
-                string[] BetCmds = new string[] { "2х", "3х", "зх", "4х" };
+                string[] BetCmds = new string[] { "2х", "3х", "зх", "4х", "банк" };
                 foreach (var cmd in BetCmds)
                     if (str.Contains(cmd))
                         return "рейз" + cmd.Replace("з", "3");

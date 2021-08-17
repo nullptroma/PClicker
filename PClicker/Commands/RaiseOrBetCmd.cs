@@ -10,7 +10,7 @@ namespace PClicker.Commands
     {
         private bool IsInValid(string str)
         {
-            string[] bets = new string[] { "рейз2х", "рейз3х", "рейз4х", "бет1/2банк", "бет2/3банк", "бетбанк" };
+            string[] bets = new string[] { "рейз2х", "рейз3х", "рейз4х", "бет1/2банк", "бет2/3банк", "бетбанк", "рейзбанк" };
             foreach (string b in bets)
                 if (b == str)
                     return false;
@@ -37,6 +37,7 @@ namespace PClicker.Commands
                     break;
                 case "бетбанк":
                 case "рейз4х":
+                case "рейзбанк":
                     WinAPI.LeftClick(wRect.X + 310, wRect.Y + 950);
                     break;
             }

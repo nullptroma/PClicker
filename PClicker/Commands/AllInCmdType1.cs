@@ -22,17 +22,14 @@ namespace PClicker.Commands
             RightDownClick(wRect);
             Thread.Sleep(Settings.SleepTime);
 
-            Point scrollerPos = ScrollPos(wHandle, wRect);
-            WinAPI.SetCursorPos(scrollerPos.X, scrollerPos.Y);
-            WinAPI.mouse_event(WinAPI.MouseEventFlags.LEFTDOWN,0,0,0,0);
-
-            for (int i = 0; i < 275; i += 1)
-                WinAPI.mouse_event(WinAPI.MouseEventFlags.MOVE, 0, -2, 0, 0);
+            WinAPI.LeftClick(wRect.X + 435, wRect.Y + 485);
             Thread.Sleep(Settings.SleepTime);
 
-            WinAPI.mouse_event(WinAPI.MouseEventFlags.LEFTUP,0,0,0,0);
-            Thread.Sleep(Settings.SleepTime);
-
+            for (int i = 0; i < 6; i++)
+            {
+                WinAPI.LeftClick(wRect.X + 360, wRect.Y + 700);
+                Thread.Sleep(75);
+            }
 
             RightDownClick(wRect);
             Thread.Sleep(Settings.SleepTime);
@@ -42,21 +39,6 @@ namespace PClicker.Commands
         private static void RightDownClick(WinAPI.RECT wRect)
         {
             WinAPI.LeftClick(wRect.X + 500, wRect.Y + 950);
-        }
-
-        private static Point ScrollPos(IntPtr wHandle, WinAPI.RECT wRect)
-        {
-            Bitmap screen = Tools.WindowScreenshot.PrintWindow(wHandle, Settings.EndHeigth);
-            Bitmap scroll = Tools.WindowScreenshot.GetRect(screen, Settings.ScrollRect);
-            Color needC = Color.FromArgb(189, 199, 206);
-            Point answer = new Point();
-            for (int y = 0; y < scroll.Height; y++)
-            {
-                Color c = scroll.GetPixel(0, y);
-                if (c == needC)
-                    answer = new Point(wRect.X+ Settings.ScrollRect.X, wRect.Y+ Settings.ScrollRect.Y+y);
-            }
-            return answer;
         }
     }
 }

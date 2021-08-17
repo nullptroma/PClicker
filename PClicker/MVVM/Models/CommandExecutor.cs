@@ -16,7 +16,6 @@ namespace PClicker.MVVM.Models
             new CheckOrCallCmd(),
             new RaiseOrBetCmd(),
             new AllInCmdType1(),
-            new AllInCmdType2(),
         };
         public IntPtr WindowHandle;
 
@@ -32,12 +31,18 @@ namespace PClicker.MVVM.Models
                     return;
                 WinAPI.ShowWindow(WindowHandle);
                 WinAPI.SetForegroundWindow(WindowHandle);
-                WinAPI.RECT wRect = WinAPI.GetWindowRect(WindowHandle);
-                WinAPI.LeftClick(wRect.X + 268, wRect.Y + 282);
-                Thread.Sleep(Settings.SleepTime);
                 foreach (var cmd in Commands)
                     if (cmd.TryExecute(WindowHandle, execCmdStr))
                         break;
+            }
+        }
+
+        public void CenterClick()
+        {
+            lock (locker)
+            {
+                WinAPI.RECT wRect = WinAPI.GetWindowRect(WindowHandle);
+                WinAPI.LeftClick(wRect.X + 260, wRect.Y + 950);
             }
         }
 
@@ -56,7 +61,7 @@ namespace PClicker.MVVM.Models
                 }
                 else if(cmd == "allin")
                 {
-                    return "allin2";
+                    return "чек";
                 }
             }
             if (string.IsNullOrEmpty(cmd))

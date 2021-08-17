@@ -22,6 +22,7 @@ namespace PClicker.MVVM.Models
             {
                 window = value;
                 Ce.WindowHandle = window.Handle;
+                OnPropertyChanged("Window");
             }
         }
         public int Id { get; }
@@ -39,10 +40,13 @@ namespace PClicker.MVVM.Models
                 }
                 enable = value;
                 Timer.Enabled = value;
+                OnPropertyChanged("Enable");
             }
         }
         private readonly Timer Timer = new Timer(1000);
         private CommandExecutor Ce = new CommandExecutor();
+        private int CountClicks;
+        public bool CheckBot { get; set; }
 
         public Pocker()
         {
@@ -55,19 +59,37 @@ namespace PClicker.MVVM.Models
 
         private void Process(object sender, ElapsedEventArgs e)
         {
+            if (!WinAPI.IsWindow(Window.Handle))
+            {
+                Enable = false;
+                Window = new WindowHandle();
+                return;
+            }
             try
             {
-                var screen = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
-                Bitmap clue = Tools.WindowScreenshot.GetRect(screen, Settings.ClueRect);
-                Tools.FindCommand.DeleteNonWhite(clue);
-                Command = Tools.FindCommand.GetCommand(clue);
-                OnPropertyChanged("Command");
-                Ce.ExecCmd(Command);
+                if (CheckBot && CountClicks % 4 == 0)
+                    Ce.CenterClick();
+                else
+                {
+                    Command = GetCommand();
+                    OnPropertyChanged("Command");
+                    Ce.ExecCmd(Command);
+                }
             }
             finally
             {
                 Timer.Enabled = Enable;
+                CountClicks++;
             }
+        }
+
+        private string GetCommand()
+        {
+            var screen = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
+            Bitmap clue = Tools.WindowScreenshot.GetRect(screen, Settings.ClueRect);
+            clue.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\pocker" + Id + ".png");
+            Tools.FindCommand.DeleteNonWhite(clue);
+            return Tools.FindCommand.GetCommand(clue);
         }
 
         public void SaveCluePos()

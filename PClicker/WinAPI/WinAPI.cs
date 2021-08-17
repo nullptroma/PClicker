@@ -77,6 +77,9 @@ namespace PClicker
         [DllImport("user32.dll")]
         public static extern void SetCursorPos(int x, int y);
 
+        [DllImport("user32.dll")]
+        public static extern bool IsWindow(IntPtr hWnd);
+
         public static void ShowWindow(IntPtr hwnd)
         {
             WinAPI.WINDOWPLACEMENT wp = new WinAPI.WINDOWPLACEMENT();

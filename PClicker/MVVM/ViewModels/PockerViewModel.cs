@@ -25,6 +25,11 @@ namespace PClicker.ViewModels
         { 
             get { return p.Enable; }
             set { p.Enable = value; OnPropertyChanged("Enable"); } 
+        }  
+        public bool CheckBot
+        { 
+            get { return p.CheckBot; }
+            set { p.CheckBot = value; OnPropertyChanged("CheckBot"); } 
         } 
         public string Command
         { 

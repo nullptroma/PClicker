@@ -70,6 +70,18 @@ namespace PClicker.ViewModels
                   }));
             }
         }
+        
+        private RelayCommand testCommand;
+        public RelayCommand TestCommand
+        {
+            get
+            {
+                return testCommand ??
+                  (testCommand = new RelayCommand(obj =>
+                  {
+                  }));
+            }
+        }
 
         public MainViewModel()
         {
@@ -78,15 +90,15 @@ namespace PClicker.ViewModels
 
         private void WriteAllWindows()
         {
-            AllWindows.Clear();
+            var newWindows = new ObservableCollection<WindowHandle>();
             WinAPI.EnumWindows((hwnd, l) =>
             {
                 var wh = new WindowHandle(hwnd);
                 if (!string.IsNullOrEmpty(wh.Name.Trim()) && wh.Name.Contains("LDPlayer"))
-                    AllWindows.Add(wh);
+                    newWindows.Add(wh);
                 return true;
             }, IntPtr.Zero);
-            AllWindows = new ObservableCollection<WindowHandle>(AllWindows.OrderBy(wh => wh.Name));
+            AllWindows = new ObservableCollection<WindowHandle>(newWindows.OrderBy(wh => wh.Name));
             OnPropertyChanged("AllWindows");
         }
     }
