@@ -77,8 +77,10 @@ namespace PClicker.ViewModels
             get
             {
                 return testCommand ??
-                  (testCommand = new RelayCommand(obj =>
+                  (testCommand = new RelayCommand(async obj =>
                   {
+                      var pockerScreen = new Bitmap(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\2021-08-20_14-30-58.png"); ;
+                      MessageBox.Show(pockerScreen.GetPixel(55, 955).ToString());
                   }));
             }
         }

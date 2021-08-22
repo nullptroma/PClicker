@@ -10,7 +10,7 @@ namespace PClicker.MVVM.Models
 {
     class CommandExecutor
     {
-        private static IPockerCmd[] Commands = new IPockerCmd[]
+        private static readonly IPockerCmd[] Commands = new IPockerCmd[]
         {
             new FoldCmd(),
             new CheckOrCallCmd(),
@@ -19,55 +19,40 @@ namespace PClicker.MVVM.Models
         };
         public IntPtr WindowHandle;
 
-        private static object locker = "LockStr";
         public void ExecCmd(string cmdStr)
         {
             if (WindowHandle == IntPtr.Zero)
                 return;
-            lock (locker)
-            {
-                string execCmdStr = ToExec(cmdStr);
-                if (string.IsNullOrEmpty(execCmdStr))
-                    return;
-                WinAPI.ShowWindow(WindowHandle);
-                WinAPI.SetForegroundWindow(WindowHandle);
-                foreach (var cmd in Commands)
-                    if (cmd.TryExecute(WindowHandle, execCmdStr))
-                        break;
-            }
+            string execCmdStr = ToExec(cmdStr);
+            if (string.IsNullOrEmpty(execCmdStr))
+                return;
+            WinAPI.ShowWindow(WindowHandle);
+            WinAPI.SetForegroundWindow(WindowHandle);
+            foreach (var cmd in Commands)
+                if (cmd.TryExecute(WindowHandle, execCmdStr))
+                    break;
         }
 
         public void CenterClick()
         {
-            lock (locker)
-            {
-                WinAPI.RECT wRect = WinAPI.GetWindowRect(WindowHandle);
-                WinAPI.LeftClick(wRect.X + 260, wRect.Y + 950);
-            }
+            WinAPI.RECT wRect = WinAPI.GetWindowRect(WindowHandle);
+            WinAPI.LeftClick(wRect.X + 260, wRect.Y + 950);
         }
 
-        private string pastCmd;
         private string pastExecutedCmd;
         private string ToExec(string cmd)
         {
-            if (cmd == pastCmd)
-            {
-                if (cmd != pastExecutedCmd)
-                {
-                    pastExecutedCmd = cmd;
-                    if (cmd == "allin")
-                        return cmd + "1";
-                    return cmd;
-                }
-                else if(cmd == "allin")
-                {
-                    return "чек";
-                }
-            }
             if (string.IsNullOrEmpty(cmd))
-                pastExecutedCmd = cmd;
-            pastCmd = cmd;
-            return "";
+                return "";
+            if (cmd == "allin")
+            {
+                if (pastExecutedCmd == "allin")
+                    return "чек";
+                else
+                    return "allin1";
+            }
+            pastExecutedCmd = cmd;
+            return cmd;
         }
     }
 }

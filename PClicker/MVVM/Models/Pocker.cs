@@ -13,22 +13,18 @@ namespace PClicker.MVVM.Models
 {
     class Pocker : INotifyPropertyChanged
     {
-        private static int PockersCount = 0;
-        private WindowHandle window;
-        public WindowHandle Window 
+        public int Id { get; }
+        public WindowHandle Window
         {
             get { return window; }
-            set 
+            set
             {
                 window = value;
                 Ce.WindowHandle = window.Handle;
                 OnPropertyChanged("Window");
             }
         }
-        public int Id { get; }
-        public string Command { get; private set; }
-        private bool enable;
-        public bool Enable 
+        public bool Enable
         {
             get { return enable; }
             set
@@ -43,20 +39,39 @@ namespace PClicker.MVVM.Models
                 OnPropertyChanged("Enable");
             }
         }
-        private readonly Timer Timer = new Timer(1000);
-        private CommandExecutor Ce = new CommandExecutor();
-        private int CountClicks;
         public bool CheckBot { get; set; }
+        public int maxPlayers;
+        public int MaxPlayers
+        {
+            get => maxPlayers;
+            set
+            {
+                maxPlayers = value;
+                Notifi.MaxPlayers = MaxPlayers;
+            }
+        }
+        public string Action { get; private set; }
+        public string TelegramID { get; set; }
+        public string Note { get; set; }
+
+        private readonly Timer Timer = new Timer(1000);
+        private static int PockersCount = 0;
+        private WindowHandle window;
+        private CommandExecutor Ce = new CommandExecutor();
+        private bool enable;
+        private NotifiFinder Notifi = new NotifiFinder();
+        private int CountTicks;
+        private TelegramNotifi tn = new TelegramNotifi();
 
         public Pocker()
         {
             Id = PockersCount++;
-
+            MaxPlayers = 6;
             Timer.Elapsed += Process;
             Timer.AutoReset = false;
         }
 
-
+        private static object locker = "LockStr";
         private void Process(object sender, ElapsedEventArgs e)
         {
             if (!WinAPI.IsWindow(Window.Handle))
@@ -67,26 +82,38 @@ namespace PClicker.MVVM.Models
             }
             try
             {
-                if (CheckBot && CountClicks % 4 == 0)
-                    Ce.CenterClick();
-                else
+                lock (locker)
                 {
-                    Command = GetCommand();
-                    OnPropertyChanged("Command");
-                    Ce.ExecCmd(Command);
+                    Bitmap pockerWindows = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
+                    Action = GetCommand(pockerWindows);
+
+                    Bitmap pockerClone = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
+                    NotifiTypes notifi = Notifi.Find(pockerClone);
+                    if (notifi == NotifiTypes.FoldButtonVisible)
+                        if (string.IsNullOrEmpty(Action) == false)
+                            notifi = notifi & (~NotifiTypes.FoldButtonVisible);
+                    if (notifi != NotifiTypes.None)
+                        tn.SendMessage($"Стол:\"{Note}\" {notifi}", TelegramID);
+
+                    if (CheckBot && CountTicks % 4 == 0)
+                        Ce.CenterClick();
+                    else
+                    {
+                        OnPropertyChanged("Action");
+                        Ce.ExecCmd(Action);
+                    }
                 }
             }
             finally
             {
                 Timer.Enabled = Enable;
-                CountClicks++;
+                CountTicks++;
             }
         }
 
-        private string GetCommand()
+        private string GetCommand(Bitmap pockerWindow)
         {
-            var screen = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
-            Bitmap clue = Tools.WindowScreenshot.GetRect(screen, Settings.ClueRect);
+            Bitmap clue = Tools.WindowScreenshot.GetRect(pockerWindow, Settings.ClueRect);
             clue.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\pocker" + Id + ".png");
             Tools.FindCommand.DeleteNonWhite(clue);
             return Tools.FindCommand.GetCommand(clue);
@@ -116,8 +143,7 @@ namespace PClicker.MVVM.Models
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

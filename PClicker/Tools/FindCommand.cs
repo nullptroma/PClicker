@@ -10,6 +10,7 @@ namespace PClicker.Tools
     {
         private static TesseractEngine engineRus = new TesseractEngine(System.IO.Directory.GetCurrentDirectory()+@"\Lang", "rus", EngineMode.Default);
         private static TesseractEngine engineEng = new TesseractEngine(System.IO.Directory.GetCurrentDirectory()+@"\Lang", "eng", EngineMode.Default);
+        private static TesseractEngine engineEngFast = new TesseractEngine(System.IO.Directory.GetCurrentDirectory()+@"\Lang", "engFast", EngineMode.Default);
 
         public static string TextRus(Bitmap bmp)
         {
@@ -22,6 +23,14 @@ namespace PClicker.Tools
         public static string TextEng(Bitmap bmp)
         {
             var page = TesseractDrawingExtensions.Process(engineEng, bmp);
+            string txt = page.GetText();
+            page.Dispose();
+            return txt;
+        }
+        
+        public static string TextEngFast(Bitmap bmp)
+        {
+            var page = TesseractDrawingExtensions.Process(engineEngFast, bmp);
             string txt = page.GetText();
             page.Dispose();
             return txt;
@@ -50,7 +59,7 @@ namespace PClicker.Tools
                 if (str.Contains(cmd))
                     return cmd;
 
-            (string, string)[] Crutches = new (string, string)[] { ("yek", "чек"),  };
+            (string, string)[] Crutches = new (string, string)[] { ("yek", "чек"), ("ииразм", "размышление") };
             {
                 foreach (var cmd in Crutches)
                     if (str.Contains(cmd.Item1))

@@ -31,9 +31,26 @@ namespace PClicker.ViewModels
             get { return p.CheckBot; }
             set { p.CheckBot = value; OnPropertyChanged("CheckBot"); } 
         } 
-        public string Command
+        public string Action
         { 
-            get { return p.Command; }
+            get { return p.Action; }
+        }
+        public int MaxPlayers
+        { 
+            get { return p.MaxPlayers; }
+            set { p.MaxPlayers = value; OnPropertyChanged("MaxPlayers"); }
+        } 
+        
+        public string TelegramID
+        { 
+            get { return p.TelegramID; }
+            set { p.TelegramID = value; OnPropertyChanged("TelegramID"); }
+        } 
+        
+        public string Note
+        { 
+            get { return p.Note; }
+            set { p.Note = value; OnPropertyChanged("Note"); }
         } 
 
         private RelayCommand changeEnableCommand;

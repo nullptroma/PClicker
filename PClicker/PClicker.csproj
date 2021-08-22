@@ -9,14 +9,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Empty.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AForge" Version="2.2.5" />
+    <PackageReference Include="AForge.Imaging" Version="2.2.5" />
+    <PackageReference Include="AForge.Math" Version="2.2.5" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="Telegram.Bot" Version="16.0.2" />
     <PackageReference Include="Tesseract" Version="4.1.1" />
     <PackageReference Include="Tesseract.Drawing" Version="4.1.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Empty.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Lang\eng.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Lang\engFast.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Lang\rus.traineddata">
