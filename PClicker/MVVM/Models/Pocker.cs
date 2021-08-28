@@ -13,101 +13,90 @@ namespace PClicker.MVVM.Models
 {
     class Pocker : INotifyPropertyChanged
     {
+        private static int PockersCount = 0;
+
         public int Id { get; }
-        public WindowHandle Window
-        {
-            get { return window; }
-            set
-            {
-                window = value;
-                Ce.WindowHandle = window.Handle;
-                OnPropertyChanged("Window");
-            }
-        }
-        public bool Enable
-        {
-            get { return enable; }
-            set
-            {
-                if (Window.Handle == IntPtr.Zero && value)
-                {
-                    MessageBox.Show("Выберите окно", "Ошибка");
-                    return;
-                }
-                enable = value;
-                Timer.Enabled = value;
-                OnPropertyChanged("Enable");
-            }
-        }
+        public WindowHandle Window { get; set; }
+        public bool Enable { get; private set; }
         public bool CheckBot { get; set; }
-        public int maxPlayers;
         public int MaxPlayers
         {
-            get => maxPlayers;
-            set
-            {
-                maxPlayers = value;
-                Notifi.MaxPlayers = MaxPlayers;
-            }
+            get => FinderNotifi.MaxPlayers;
+            set => FinderNotifi.MaxPlayers=value;
         }
         public string Action { get; private set; }
         public string TelegramID { get; set; }
         public string Note { get; set; }
 
         private readonly Timer Timer = new Timer(1000);
-        private static int PockersCount = 0;
-        private WindowHandle window;
-        private CommandExecutor Ce = new CommandExecutor();
-        private bool enable;
-        private NotifiFinder Notifi = new NotifiFinder();
         private int CountTicks;
-        private TelegramNotifi tn = new TelegramNotifi();
+        private CommandExecutor Executor = new CommandExecutor();
+        private NotifiFinder FinderNotifi = new NotifiFinder();
+        private TelegramNotifi SenderNotifi = new TelegramNotifi();
+        private ChipReplenisher Replenisher = new ChipReplenisher();
 
         public Pocker()
         {
             Id = PockersCount++;
             MaxPlayers = 6;
-            Timer.Elapsed += Process;
+            Timer.Elapsed += Tick;
             Timer.AutoReset = false;
         }
 
-        private static object locker = "LockStr";
-        private void Process(object sender, ElapsedEventArgs e)
+        public void SetEnable(bool enable)
         {
-            if (!WinAPI.IsWindow(Window.Handle))
+            if (Window.Handle == IntPtr.Zero && enable)
             {
-                Enable = false;
-                Window = new WindowHandle();
+                MessageBox.Show("Выберите окно", "Ошибка");
                 return;
             }
+            Enable = enable;
+            Timer.Enabled = enable;
+            OnPropertyChanged("Enable");
+        }
+
+        private static object locker = "LockStr";
+        private void Tick(object sender, ElapsedEventArgs e)
+        {
             try
             {
                 lock (locker)
-                {
-                    Bitmap pockerWindows = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
-                    Action = GetCommand(pockerWindows);
-
-                    Bitmap pockerClone = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
-                    NotifiTypes notifi = Notifi.Find(pockerClone);
-                    if (notifi == NotifiTypes.FoldButtonVisible)
-                        if (string.IsNullOrEmpty(Action) == false)
-                            notifi = notifi & (~NotifiTypes.FoldButtonVisible);
-                    if (notifi != NotifiTypes.None)
-                        tn.SendMessage($"Стол:\"{Note}\" {notifi}", TelegramID);
-
-                    if (CheckBot && CountTicks % 4 == 0)
-                        Ce.CenterClick();
-                    else
-                    {
-                        OnPropertyChanged("Action");
-                        Ce.ExecCmd(Action);
-                    }
-                }
+                    Process();
             }
             finally
             {
                 Timer.Enabled = Enable;
                 CountTicks++;
+            }
+        }
+
+        private void Process()
+        {
+            if (!WinAPI.IsWindow(Window.Handle))
+            {
+                Enable = false;
+                Window = new WindowHandle();
+                OnPropertyChanged("Window");
+                return;
+            }
+
+            Bitmap pockerWindows = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
+            Action = GetCommand(pockerWindows);
+
+            Bitmap pockerClone = Tools.WindowScreenshot.PrintWindow(Window.Handle, Settings.EndHeigth);
+            NotifiTypes notifi = FinderNotifi.Find(pockerClone);
+            if (notifi == NotifiTypes.FoldButtonVisible)
+                if (string.IsNullOrEmpty(Action) == false)
+                    notifi = notifi & (~NotifiTypes.FoldButtonVisible);
+            if (notifi != NotifiTypes.None)
+                SenderNotifi.SendMessage($"Стол:\"{Note}\" {notifi}", TelegramID);
+
+            if (CheckBot && CountTicks % 4 == 0)
+                Executor.CenterClick(Window.Handle);
+            else
+            {
+                OnPropertyChanged("Action");
+                Executor.ExecCmd(Action, Window.Handle);
             }
         }
 

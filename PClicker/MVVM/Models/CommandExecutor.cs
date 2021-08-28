@@ -17,9 +17,8 @@ namespace PClicker.MVVM.Models
             new RaiseOrBetCmd(),
             new AllInCmdType1(),
         };
-        public IntPtr WindowHandle;
 
-        public void ExecCmd(string cmdStr)
+        public void ExecCmd(string cmdStr, IntPtr WindowHandle)
         {
             if (WindowHandle == IntPtr.Zero)
                 return;
@@ -33,7 +32,7 @@ namespace PClicker.MVVM.Models
                     break;
         }
 
-        public void CenterClick()
+        public void CenterClick(IntPtr WindowHandle)
         {
             WinAPI.RECT wRect = WinAPI.GetWindowRect(WindowHandle);
             WinAPI.LeftClick(wRect.X + 260, wRect.Y + 950);

@@ -24,7 +24,7 @@ namespace PClicker.ViewModels
         public bool Enable
         { 
             get { return p.Enable; }
-            set { p.Enable = value; OnPropertyChanged("Enable"); } 
+            set { p.SetEnable(value); OnPropertyChanged("Enable"); } 
         }  
         public bool CheckBot
         { 
