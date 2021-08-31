@@ -103,7 +103,6 @@ namespace PClicker.MVVM.Models
         private string GetCommand(Bitmap pockerWindow)
         {
             Bitmap clue = Tools.WindowScreenshot.GetRect(pockerWindow, Settings.ClueRect);
-            clue.Save(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\pocker" + Id + ".png");
             Tools.FindCommand.DeleteNonWhite(clue);
             return Tools.FindCommand.GetCommand(clue);
         }

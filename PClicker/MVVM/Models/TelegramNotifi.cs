@@ -12,8 +12,6 @@ namespace PClicker.MVVM.Models
 
         public void SendMessage(string message, string id="")
         {
-            //if(id != "935909447")
-                //Client.SendTextMessageAsync("935909447", message);
             if(!string.IsNullOrEmpty(id))
                 Client.SendTextMessageAsync(id, message);
         }
