@@ -8,3 +8,6 @@
 В случае, если помощник требует оплату, отправляет сообщение в телеграм.
 
 Используется MVVM, WPF
+
+![image](https://user-images.githubusercontent.com/64524860/219857719-8ebe2378-644d-4024-9a53-4d9938fe662f.png)
+![image](https://user-images.githubusercontent.com/64524860/219857748-b1dea5fe-2e1f-45d1-a1dc-cc4e343f85c5.png)
